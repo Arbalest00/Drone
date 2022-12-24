@@ -26,11 +26,11 @@ u8 All_Init()
 	//初始化电调输出功能
 	DrvPwmOutInit();
 	MyDelayMs(100);
-	//串口2初始化，函数参数为波特率
-	DrvUart2Init(500000);
-	//串口3初始化
-	DrvUart3Init(500000);
-	//接匿名光流
+	//串口2树莓派
+	DrvUart2Init(460800);
+	//串口3激光雷达LDS-08
+	DrvUart3Init(115200);
+	//串口4接匿名光流
 	DrvUart4Init(500000);
 	//串口5接imu
 	DrvUart5Init(500000);

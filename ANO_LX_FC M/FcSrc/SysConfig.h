@@ -9,7 +9,6 @@ typedef s32 vec3_s32[3];
 typedef s32 vec2_s32[2];
 typedef s16 vec3_s16[3];
 typedef s16 vec2_s16[2];
-
 #define TICK_PER_SECOND	1000
 #define TICK_US	(1000000/TICK_PER_SECOND)
 #define PWM_FRE_HZ 400

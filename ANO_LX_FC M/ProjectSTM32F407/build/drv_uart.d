@@ -1,5 +1,5 @@
 .\build\drv_uart.o: ..\DriversMcu\STM32F407\Drivers\Drv_Uart.c
-.\build\drv_uart.o: ..\DriversMcu\STM32F407\Drivers\Drv_Uart.h
+.\build\drv_uart.o: ..\FcSrc\Ano_DT_LX.h
 .\build\drv_uart.o: ..\FcSrc\SysConfig.h
 .\build\drv_uart.o: ..\DriversMcu\STM32F407\McuConfig.h
 .\build\drv_uart.o: ..\DriversMcu\STM32F407\Libraries\CMSIS\ST\STM32F4xx\Include\stm32f4xx.h
@@ -30,7 +30,7 @@
 .\build\drv_uart.o: ..\FcSrc\SysConfig.h
 .\build\drv_uart.o: ..\DriversMcu\STM32F407\Drivers\Drv_Sys.h
 .\build\drv_uart.o: ..\FcSrc\ANO_LX.h
-.\build\drv_uart.o: ..\FcSrc\Ano_DT_LX.h
 .\build\drv_uart.o: ..\DriversBsp\Drv_UbloxGPS.h
 .\build\drv_uart.o: ..\DriversBsp\Drv_AnoOf.h
 .\build\drv_uart.o: ..\Mycode\my_protocol.h
+.\build\drv_uart.o: ..\DriversMcu\STM32F407\Drivers\Drv_Uart.h

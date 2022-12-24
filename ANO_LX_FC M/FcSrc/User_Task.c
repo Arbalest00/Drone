@@ -9,21 +9,18 @@
 u8 eme_stop=0;
 void tar_setdata(u16 x,u16 y, u16 z,u16 yaw)//实时控制帧发送速度
 	{
-		rt_tar.st_data.vel_x=x;
-		rt_tar.st_data.vel_y=y;
-		rt_tar.st_data.vel_z=z;
-		rt_tar.st_data.yaw_dps=yaw;
+		rt_tar.st_data.vel_x=x;//头向速度
+		rt_tar.st_data.vel_y=y;//左正右负
+		rt_tar.st_data.vel_z=z;//上下速度
+		rt_tar.st_data.yaw_dps=yaw;//逆时针为正
 		dt.fun[0x41].WTS = 1;
 	}
-void UserTask_OneKeyCmd(void)
+void UserTask_OneKeyCmd(void)//一键任务
 {
-    //////////////////////////////////////////////////////////////////////
-    //一键起飞/降落例程
-    //////////////////////////////////////////////////////////////////////
-    //用静态变量记录一键起飞/降落指令已经执行。
     static u8 one_key_takeoff_f = 1, one_key_land_f = 1, one_key_mission_f = 0;
     static u8 mission_step;
-    //判断有遥控信号才执行
+	//////////////////////////////////////////////////////////////////////////////////
+    //一键起飞 降落判断有遥控信号才执行
     if (rc_in.no_signal == 0)
     {
         //判断第6通道拨杆位置 1300<CH_6<1700
@@ -63,6 +60,7 @@ void UserTask_OneKeyCmd(void)
         }
 	}
     ////////////////////////////////////////////////////////////////////////
+	//一键锁桨
 	if (rc_in.rc_ch.st_data.ch_[ch_8_aux4] > 1700 &&rc_in.rc_ch.st_data.ch_[ch_8_aux4] < 2200) 
 	{
 		if (eme_stop == 0) 
@@ -80,6 +78,8 @@ void UserTask_OneKeyCmd(void)
 	{
 		eme_stop = 0;
 	}
+	///////////////////////////////////////////////////////////////////////
+	//任务启动
 	if(rc_in.rc_ch.st_data.ch_[ch_7_aux3]>1700 && rc_in.rc_ch.st_data.ch_[ch_7_aux3]<2200)
 		{
 			//还没有执行
@@ -93,11 +93,13 @@ void UserTask_OneKeyCmd(void)
 		}
 		else
 		{
-			//复位标记，以便再次执行
-			one_key_mission_f = 0;		
+			//复位标记，以便再次执行1
+			one_key_mission_f = 0;	
+			OneKey_Land();			
 		}
-		//
-		if(one_key_mission_f==1)
+	//////////////////////////////////////////////////////////////////////
+	//任务列表
+	if(one_key_mission_f==1)
 		{
 			static u16 time_dly_cnt_ms;
 			//
@@ -111,21 +113,28 @@ void UserTask_OneKeyCmd(void)
 				}
 				break;
 				case 1:
-				{
-					//切换程控模式
-					mission_step +=1;
-				}
+					{
+						//解锁
+						mission_step +=FC_Unlock();
+					}
 				break;
 				case 2:
 				{
-					//解锁
-					mission_step +=1;
+					if(time_dly_cnt_ms<3500)//转桨延时
+					{
+						time_dly_cnt_ms+=20;//ms
+					}
+					else
+					{
+						time_dly_cnt_ms = 0;
+						mission_step += OneKey_Takeoff(150);
+					}
 				}
 				break;
 				case 3:
 				{
-					//等1秒
-					if(time_dly_cnt_ms<1000)
+					//等3秒
+					if(time_dly_cnt_ms<3000)//任务延时
 					{
 						time_dly_cnt_ms+=20;//ms
 					}
@@ -138,14 +147,27 @@ void UserTask_OneKeyCmd(void)
 				break;
 				case 4:
 				{
-					tar_setdata(speed_x,speed_y,0,0);
-					mission_step += 1;//参数单位：厘米； 0：默认上位机设置的高度。
+					tar_setdata(0,-speed_y,0,0);
+					mission_step += 1;
 				}
 				break;
 				case 5:
 				{
-					//等10秒
-					if(time_dly_cnt_ms<3000)
+					if(time_dly_cnt_ms<2000)
+					{
+						time_dly_cnt_ms+=20;//ms
+					}
+					else
+					{
+						tar_setdata(speed_x,0,0,0);
+						time_dly_cnt_ms = 0;
+						mission_step += 1;
+					}
+				}	
+				break;
+				case 6:
+				{
+					if(time_dly_cnt_ms<22000)
 					{
 						time_dly_cnt_ms+=20;//ms
 					}
@@ -154,76 +176,14 @@ void UserTask_OneKeyCmd(void)
 						tar_setdata(0,0,0,0);
 						time_dly_cnt_ms = 0;
 						mission_step += 1;
-					}					
-				}
-				break;
-				case 6:
-				{
-					//前进1米
-					tar_setdata(-speed_x,-speed_y,0,0);
-				}
-				break;	
-				case 7:
-				{
-					//等10秒
-					if(time_dly_cnt_ms<1000)
-					{
-						time_dly_cnt_ms+=20;//ms
 					}
-					else
-					{
-						time_dly_cnt_ms = 0;
-						mission_step += 1;
-					}	
 				}
 				break;
-				case 8:
+				default:
 				{
-					//右移1米
-					mission_step += Horizontal_Move(50,10,90);
+					OneKey_Land();
 				}
 				break;
-				case 9:
-				{
-					//等10秒
-					if(time_dly_cnt_ms<1000)
-					{
-						time_dly_cnt_ms+=20;//ms
-					}
-					else
-					{
-						time_dly_cnt_ms = 0;
-						mission_step += 1;
-					}						
-				}
-				break;
-				case 10:
-				{
-					//执行一键降落
-					OneKey_Land();					
-				}
-				break;	
-				case 11:
-				{
-					
-				}
-				break;
-				case 12:
-				{
-				
-				}
-				break;
-				case 13:
-				{
-					
-				}
-				break;
-				case 14:
-				{
-					
-				}
-				break;				
-				default:break;
 			}
 		}
 		else

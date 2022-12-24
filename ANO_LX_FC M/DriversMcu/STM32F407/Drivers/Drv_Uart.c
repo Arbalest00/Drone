@@ -5,18 +5,17 @@
  * 技术Q群 ：190169595
  * 描述    ：串口驱动
 **********************************************************************************/
-#include "Drv_Uart.h"
 #include "Ano_DT_LX.h"
 #include "Drv_UbloxGPS.h"
 #include "Drv_AnoOf.h"
 #include "my_protocol.h"
 void NoUse(u8 data){}
 //串口接收发送快速定义，直接修改此处的函数名称宏，修改成自己的串口解析和发送函数名称即可，注意函数参数格式需统一
-#define U1GetOneByte	UBLOX_M8_GPS_Data_Receive
-#define U2GetOneByte	pi_receive
-#define U3GetOneByte	NoUse
-#define U4GetOneByte	AnoOF_GetOneByte
-#define U5GetOneByte	ANO_DT_LX_Data_Receive_Prepare	
+#define U1GetOneByte	UBLOX_M8_GPS_Data_Receive 				//GPS 目前没用
+#define U2GetOneByte	pi_receive				  				//树莓派
+#define U3GetOneByte	lidar_receive									//激光雷达
+#define U4GetOneByte	AnoOF_GetOneByte						//光流
+#define U5GetOneByte	ANO_DT_LX_Data_Receive_Prepare			//凌霄IMU
 	
 //====uart1
 void DrvUart1Init(u32 br_num)
