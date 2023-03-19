@@ -20,3 +20,83 @@ TIMx clk = APBx *2
 
 
 
+case 13://旋转完成 速度重置 进树莓派控制 开环！
+				{
+					if(time_dly_cnt_ms<3000)
+					{
+						time_dly_cnt_ms+=20;//ms
+					}
+					else
+					{
+						tar_setdata(0,0,0,0);
+						mission_step +=1;
+						time_dly_cnt_ms=0;
+					}
+				}
+				break;
+				case 14://闪笔 开环飞TMD 直到13号方块 再转90度 这次是逆时针逆时针逆时针逆时针逆时针逆时针逆时针逆时针逆时针
+				{
+					if(received_data.next_task_sign==0)
+					{
+						tar_setdata(received_data.com_x,received_data.com_y,received_data.com_z,received_data.com_yaw);
+					}
+					else
+					{
+						tar_setdata(0,0,0,speed_yaw);
+						mission_step +=1;
+					}
+				}
+				case 15://旋转完成 速度重置 进树莓派控制 开环
+				{
+					if(time_dly_cnt_ms<3000)
+					{
+						time_dly_cnt_ms+=20;//ms
+					}
+					else
+					{
+						tar_setdata(0,0,0,0);
+						mission_step +=1;
+						time_dly_cnt_ms=0;
+					}
+				}
+				break;
+				case 16://闪笔 开环飞TMD 直到7号方块 再转90度 这次也是逆时针逆时针逆时针逆时针逆时针逆时针逆时针逆时针逆时针
+				{
+					if(received_data.next_task_sign==0)
+					{
+						tar_setdata(received_data.com_x,received_data.com_y,received_data.com_z,received_data.com_yaw);
+					}
+					else
+					{
+						tar_setdata(0,0,0,speed_yaw);
+						mission_step +=1;
+					}
+				}
+				break;
+				case 17://旋转完成 速度重置 进树莓派控制 开环
+				{
+					if(time_dly_cnt_ms<3000)
+					{
+						time_dly_cnt_ms+=20;//ms
+					}
+					else
+					{
+						tar_setdata(0,0,0,0);
+						mission_step +=1;
+						time_dly_cnt_ms=0;
+					}
+				}
+				break;
+				case 18://闪笔 开环飞TMD 直到5号方块 再转90度 这次是顺时针顺时针顺时针顺时针顺时针顺时针顺时针顺时针顺时针
+				{
+					if(received_data.next_task_sign==0)
+					{
+						tar_setdata(received_data.com_x,received_data.com_y,received_data.com_z,received_data.com_yaw);
+					}
+					else
+					{
+						tar_setdata(0,0,0,-speed_yaw);
+						mission_step +=1;
+					}
+				}
+				break;

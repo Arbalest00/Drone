@@ -2,17 +2,19 @@
 #include "Drv_RcIn.h"
 #include "LX_FC_Fun.h"
 #include "ANO_DT_LX.h"
+#include "Drv_AnoOf.h"
 #define speed_x 10
 #define speed_y 10
 #define speed_z 10
-#define speed_yaw 10
+#define speed_yaw 30
 u8 eme_stop=0;
+u16 pid_speed=0;
 void tar_setdata(u16 x,u16 y, u16 z,u16 yaw)//实时控制帧发送速度
 	{
-		rt_tar.st_data.vel_x=x;//头向速度
+		rt_tar.st_data.vel_x=x;//头向速度 单位cm/s
 		rt_tar.st_data.vel_y=y;//左正右负
 		rt_tar.st_data.vel_z=z;//上下速度
-		rt_tar.st_data.yaw_dps=yaw;//逆时针为正
+		rt_tar.st_data.yaw_dps=yaw;//逆时针为正 单位度/秒
 		dt.fun[0x41].WTS = 1;
 	}
 void UserTask_OneKeyCmd(void)//一键任务
@@ -112,13 +114,14 @@ void UserTask_OneKeyCmd(void)//一键任务
 					mission_step +=1;
 				}
 				break;
-				case 1:
+				case 1://解锁
 					{
-						//解锁
+						PID_height_init();
+						
 						mission_step +=FC_Unlock();
 					}
 				break;
-				case 2:
+				case 2://十字处起飞
 				{
 					if(time_dly_cnt_ms<3500)//转桨延时
 					{
@@ -127,13 +130,12 @@ void UserTask_OneKeyCmd(void)//一键任务
 					else
 					{
 						time_dly_cnt_ms = 0;
-						mission_step += OneKey_Takeoff(150);
+						mission_step += OneKey_Takeoff(100);
 					}
 				}
 				break;
-				case 3:
+				case 3://等三秒
 				{
-					//等3秒
 					if(time_dly_cnt_ms<3000)//任务延时
 					{
 						time_dly_cnt_ms+=20;//ms
@@ -145,34 +147,40 @@ void UserTask_OneKeyCmd(void)//一键任务
 					}
 				}
 				break;
-				case 4:
+				case 4://延时2s
 				{
-					tar_setdata(0,-speed_y,0,0);
+					pid_speed=0;
+					PID_height_init();
+					time_dly_cnt_ms = 0;
 					mission_step += 1;
-				}
+				}	
 				break;
-				case 5:
+				case 5://开环前进移动2.2m 不出意外的话现在在A的正上方
 				{
-					if(time_dly_cnt_ms<2000)
+					if(time_dly_cnt_ms<10000)
 					{
+						tar_setdata(speed_x,0,height_set(ano_of.of_alt_cm,150),0);
 						time_dly_cnt_ms+=20;//ms
 					}
 					else
 					{
-						tar_setdata(speed_x,0,0,0);
+						tar_setdata(0,0,0,0);
+						PID_height_init();
 						time_dly_cnt_ms = 0;
 						mission_step += 1;
 					}
-				}	
+				}
 				break;
-				case 6:
+				case 6://开环前进移动2.2m 不出意外的话现在在A的正上方
 				{
-					if(time_dly_cnt_ms<22000)
+					if(time_dly_cnt_ms<10000)
 					{
+						tar_setdata(-speed_x,0,height_set(ano_of.of_alt_cm,100),0);
 						time_dly_cnt_ms+=20;//ms
 					}
 					else
 					{
+						pid_speed=0;
 						tar_setdata(0,0,0,0);
 						time_dly_cnt_ms = 0;
 						mission_step += 1;

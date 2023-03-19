@@ -30,6 +30,9 @@
 .\build\user_task.o: ..\FcSrc\SysConfig.h
 .\build\user_task.o: ..\DriversMcu\STM32F407\Drivers\Drv_Sys.h
 .\build\user_task.o: ..\FcSrc\ANO_LX.h
+.\build\user_task.o: ..\Mycode\my_protocol.h
+.\build\user_task.o: ..\DriversMcu\STM32F407\Drivers\Drv_Uart.h
 .\build\user_task.o: ..\DriversMcu\STM32F407\Drivers\Drv_RcIn.h
 .\build\user_task.o: ..\FcSrc\LX_FC_Fun.h
 .\build\user_task.o: ..\FcSrc\ANO_DT_LX.h
+.\build\user_task.o: ..\DriversBsp\Drv_AnoOf.h
