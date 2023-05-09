@@ -3,7 +3,7 @@
 #include "SysConfig.h"
 #include "Drv_Sys.h"
 #include "ANO_LX.h"
-
+#include "stm32f4xx.h"
 typedef struct
 {
 	u8 sig_mode; //0==null,1==ppm,2==sbus

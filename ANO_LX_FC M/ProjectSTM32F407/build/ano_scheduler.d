@@ -31,6 +31,9 @@
 .\build\ano_scheduler.o: ..\DriversMcu\STM32F407\Drivers\Drv_Sys.h
 .\build\ano_scheduler.o: ..\FcSrc\ANO_LX.h
 .\build\ano_scheduler.o: ..\FcSrc\User_Task.h
+.\build\ano_scheduler.o: ..\Mycode\my_fun.h
+.\build\ano_scheduler.o: ..\FcSrc\LX_FC_Fun.h
+.\build\ano_scheduler.o: ..\FcSrc\ANO_DT_LX.h
 .\build\ano_scheduler.o: ..\Mycode\my_protocol.h
 .\build\ano_scheduler.o: ..\DriversMcu\STM32F407\Drivers\Drv_Uart.h
 .\build\ano_scheduler.o: ..\Mycode\my_protocol.h

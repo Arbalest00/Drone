@@ -197,6 +197,13 @@ static void ANO_DT_LX_Data_Receive_Anl(u8 *data, u8 len)
 			fc_vel.byte_data[i] = *(data + 4 + i);
 		}
 	}
+	else if (*(data + 2) == 0X08)
+	{
+		for(u8 i=0;i<8;i++)
+		{
+			fc_pos.byte_data[i] = *(data + 4 + i);
+		}
+	}
 	//姿态角（需要在上位机凌霄IMU界面配置输出功能）
 	else if (*(data + 2) == 0X03)
 	{

@@ -8,8 +8,8 @@
 ".\build\lx_fc_fun.o"
 ".\build\lx_fc_state.o"
 ".\build\drv_bsp.o"
-".\build\ano_math.o"
 ".\build\drv_anoof.o"
+".\build\ano_math.o"
 ".\build\drv_ubloxgps.o"
 ".\build\stm32f4xx_it.o"
 ".\build\drv_sys.o"
@@ -32,6 +32,9 @@
 ".\build\stm32f4xx_tim.o"
 ".\build\stm32f4xx_usart.o"
 ".\build\my_protocol.o"
+".\build\my_fun.o"
+".\build\side1.o"
+".\build\side2.o"
 --library_type=microlib --strict --scatter ".\build\ANO_LX.sct"
 --summary_stderr --info summarysizes --map --load_addr_map_info --xref --callgraph --symbols
 --info sizes --info totals --info unused --info veneers

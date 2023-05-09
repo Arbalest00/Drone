@@ -850,10 +850,10 @@ ARM Macro Assembler    Page 14
 
 
 C:\Users\Administrator\AppData\Local\Arm\Packs\Keil\STM32F4xx_DFP\2.16.0\Driver
-s\CMSIS\Device\ST\STM32F4xx\Include --predefine="__MICROLIB SETA 1" --predefine
-="__UVISION_VERSION SETA 537" --predefine="STM32F407xx SETA 1" --list=.\build\s
-tartup_stm32f4xx.lst ..\DriversMcu\STM32F407\Libraries\CMSIS\ST\STM32F4xx\Sourc
-e\Templates\arm\startup_stm32f4xx.s
+s\CMSIS\Device\ST\STM32F4xx\Include -IC:\Keil_v5\ARM\CMSIS\Include --predefine=
+"__MICROLIB SETA 1" --predefine="__UVISION_VERSION SETA 537" --predefine="STM32
+F407xx SETA 1" --list=.\build\startup_stm32f4xx.lst ..\DriversMcu\STM32F407\Lib
+raries\CMSIS\ST\STM32F4xx\Source\Templates\arm\startup_stm32f4xx.s
 
 
 

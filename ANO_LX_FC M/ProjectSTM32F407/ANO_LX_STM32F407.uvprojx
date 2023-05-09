@@ -480,11 +480,6 @@
               <FilePath>..\DriversBsp\Drv_BSP.h</FilePath>
             </File>
             <File>
-              <FileName>Ano_Math.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\DriversBsp\Ano_Math.c</FilePath>
-            </File>
-            <File>
               <FileName>Ano_Math.h</FileName>
               <FileType>5</FileType>
               <FilePath>..\DriversBsp\Ano_Math.h</FilePath>
@@ -493,6 +488,11 @@
               <FileName>Drv_AnoOf.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\DriversBsp\Drv_AnoOf.c</FilePath>
+            </File>
+            <File>
+              <FileName>Ano_Math.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\DriversBsp\Ano_Math.c</FilePath>
             </File>
             <File>
               <FileName>Drv_AnoOf.h</FileName>
@@ -688,6 +688,31 @@
               <FileName>my_protocol.h</FileName>
               <FileType>5</FileType>
               <FilePath>..\Mycode\my_protocol.h</FilePath>
+            </File>
+            <File>
+              <FileName>my_fun.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\my_fun.c</FilePath>
+            </File>
+            <File>
+              <FileName>my_fun.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>.\my_fun.h</FilePath>
+            </File>
+          </Files>
+        </Group>
+        <Group>
+          <GroupName>side</GroupName>
+          <Files>
+            <File>
+              <FileName>side1.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\side\side1.c</FilePath>
+            </File>
+            <File>
+              <FileName>side2.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\side\side2.c</FilePath>
             </File>
           </Files>
         </Group>

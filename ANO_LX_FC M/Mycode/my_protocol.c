@@ -1,11 +1,12 @@
 #include "my_protocol.h"
+#include "User_Task.h"
 struct sdata received_data={0,0,0,0,0,0};
 struct PID_inc height_PID;
 u8 RxBuffer[256];//树莓派数据缓存
 u8 LidarBuffer[256];//激光雷达数据缓存
 u8 pi_receive_done_sign=0;//树莓派接收完成标志位
 u8 lidar_receive_done_sign=0;//激光雷达接收完成标志位
-u8 task_sta_t=0;//任务状态标志位
+s16 CSPX=0,CSPY=0;
 void Send_str_by_len(USART_TypeDef * USARTx,u8 *s,u16 len)//串口发送函数
 {
 	u16 i=0;
@@ -29,20 +30,7 @@ void pi_receive(u8 data)//树莓派接受协议 串口2
 	{
 		state_1=2;
 		RxBuffer[1]=data;
-		switch(RxBuffer[1])
-		{
-			case 0x00:
-				task_sta_t=0;
-			break;
-			case 0x01:
-				task_sta_t=1;
-			break;
-			case 0x02:
-				task_sta_t=2;
-			break;
-			default:
-				task_sta_t=0;
-		}
+
 	}
 	else if(state_1==2)		//x移动指令
 	{
@@ -64,16 +52,15 @@ void pi_receive(u8 data)//树莓派接受协议 串口2
 		state_1=6;
 		RxBuffer[5]=data;
 	}
-	else if (state_1==6)	//切换任务指令
+	else if (state_1==6) 		//start指令 
 	{
-		state_1=7;
 		RxBuffer[6]=data;
+		state_1=7;
 	}
-	else if(state_1==7&&data==0xFF)   //帧尾
+	else if (state_1==7&&data==0xFF) 	//接收完成 帧尾0xFF
 	{
-		state_1 = 0;
 		RxBuffer[7]=data;
-		received_data.task_sta=task_sta_t;
+		received_data.task_sta=RxBuffer[1];
 		received_data.com_x=RxBuffer[2];
 		received_data.com_y=RxBuffer[3];
 		received_data.com_z=RxBuffer[4];
@@ -82,9 +69,11 @@ void pi_receive(u8 data)//树莓派接受协议 串口2
 		pi_receive_done_sign=1;
 	}
 	else
+	{
 		state_1 = 0;
+	}
 }
-void lidar_receive(u8 data)//激光雷达LDS=08接收 串口3
+void lidar_receive(u8 data)//激光雷达LDS-08接收 串口3//已废弃
 {
 	static u8 lidar_state=0;
 	static u8 i=0;
@@ -106,7 +95,7 @@ void lidar_receive(u8 data)//激光雷达LDS=08接收 串口3
 		i++;
 	}
 }
-void lidar_cal(struct lidar_data * lidar)//lidar缓存数据计算
+void lidar_cal(struct lidar_data * lidar)//lidar缓存数据计算//已废弃
 {
 		lidar->lidar_speed=(int)LidarBuffer[3]*16+(int)LidarBuffer[2];
 		lidar->start_angle=(int)LidarBuffer[5]*16+(int)LidarBuffer[4];
@@ -121,18 +110,18 @@ void lidar_cal(struct lidar_data * lidar)//lidar缓存数据计算
 }
 void PID_height_init()
 {
-	height_PID.p=1.5;
-	height_PID.i=0.9;
-	height_PID.d=0.6;
+	height_PID.p=2;
+	height_PID.i=1.4;
+	height_PID.d=0.8;
 	height_PID.actual=0;
 	height_PID.target=0;
 	height_PID.err_current=0;
 	height_PID.err_last=0;
 	height_PID.err_previous=0;
 }
-u16 height_set(u32 height,u16 height_set)
+s16 height_set(u32 height,u16 height_set)
 {
-	u16 output=0;
+	s16 output=0;
 	height_PID.actual=height;
 	height_PID.target=height_set; 
 	height_PID.err_current=height_PID.target-height_PID.actual;
@@ -142,4 +131,43 @@ u16 height_set(u32 height,u16 height_set)
 	if (output>30 ) output=30;
 	else if(output<-30) output=-30;
 	return output;
+}
+void pi_send()
+{
+	static u8 stage=0;
+	if(stage==0)
+	{
+		USART_SendData(USART2,0xAA);
+		stage=1;
+	}
+	else if(stage==1)
+	{
+		USART_SendData(USART2,received_data.task_sta);
+		stage=2;
+	}
+	else if(stage==2)
+	{
+		USART_SendData(USART2,mission_flag);
+		stage=3;
+	}
+	else if(stage==3)
+	{
+		USART_SendData(USART2,mission_done_flag);
+		stage=4;
+	}
+	else if(stage==4)
+	{
+		USART_SendData(USART2,0xFF);
+		stage=0;
+	}
+	else stage=0;
+}
+void my_spcal(s16 x,s16 y)
+{
+        CSPX = y*0.3 ;
+        CSPY = x*0.3 ;
+	if(CSPX>30) CSPX=30;
+	if(CSPX<-30) CSPX=-30;
+	if(CSPY>30) CSPY=30;
+	if(CSPY<-30) CSPY=-30;
 }

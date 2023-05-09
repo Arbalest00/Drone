@@ -111,6 +111,18 @@ typedef union
 	u8 byte_data[6];
 	_fc_vel_st st_data;
 }_fc_vel_un;
+//0x08
+typedef struct
+{
+	s32 vel_x;
+	s32 vel_y;
+}__attribute__ ((__packed__)) _fc_pos_st;
+
+typedef union 
+{
+	u8 byte_data[8];
+	_fc_pos_st st_data;
+}_fc_pos_un;
 //
 typedef struct
 {
@@ -130,6 +142,7 @@ extern _fc_att_qua_un fc_att_qua;
 extern _fc_vel_un fc_vel;
 extern _rt_tar_un rt_tar;
 extern _fc_bat_un fc_bat;
+extern _fc_pos_un fc_pos;
 extern _pwm_st pwm_to_esc;
 //==º¯ÊýÉùÃ÷
 //static
